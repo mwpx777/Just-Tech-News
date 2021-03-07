@@ -7,7 +7,7 @@ const { User } = require('../../models');
 router.get('/', (req, res) => {
     // access User model and run .findAll() method  *this is same as SELECT * from users in SQL*
     User.findAll({
-    attributes: {exclude: ['password']}
+    // attributes: {exclude: ['password']}
     })
         .then(dbUserData => res.json(dbUserData))
         .catch(err => {
@@ -59,6 +59,8 @@ router.put('/:id', (req, res) => {
   
     // if req.body has exact key/value pairs to match the model, you can just use `req.body` instead
     User.update(req.body, {
+        // this is for bcrypt 
+        individualHooks: true,
       where: {
         id: req.params.id
       }
