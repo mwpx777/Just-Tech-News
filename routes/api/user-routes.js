@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+// this destructures Post and Vote from the imported models
+const { User, Post, Vote } = require('../../models');
 
 
 // THESE ARE RESTful APIs
@@ -23,7 +24,20 @@ router.get('/:id', (req, res) => {
     
         where: {
             id: req.params.id
-        }
+        },
+        include: [
+          {
+            model: Post,
+            attributes: [ 'id', 'title', 'post_url', 'created_at']
+          },
+          {
+            model: Post,
+            attributes: ['title'],
+            through: Vote,
+            // this will create a table column called voted_posts
+            as: 'voted_posts'
+          }
+        ]
     })
         .then(dbUserData => {
             if (!dbUserData) {
@@ -66,7 +80,7 @@ router.post('/login', (req, res) => {
           return;
         }
     
-        // res.json({ user: dbUserData });
+        res.json({ user: dbUserData });
     
         // Verify user 
         // this will pass req.body.password into checkPassword function in user.js checkPassword function
