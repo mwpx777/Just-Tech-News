@@ -1,6 +1,6 @@
 const router = require('express').Router();
-// this destructures Post and Vote from the imported models
-const { User, Post, Vote } = require('../../models');
+// this destructures from the imported models
+const { User, Post, Vote, Comment } = require('../../models');
 
 
 // THESE ARE RESTful APIs
@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     User.findOne({
         attributes: {exclude: ['password']},
-    
+      // include id number from query
         where: {
             id: req.params.id
         },
@@ -30,6 +30,16 @@ router.get('/:id', (req, res) => {
             model: Post,
             attributes: [ 'id', 'title', 'post_url', 'created_at']
           },
+          // this is finding the comments this user made 
+          {
+            model: Comment,
+            attributes: ['id', 'comment_text', 'created_at'],
+            include: {
+              model: Post,
+              attributes: ['title']
+            }
+          },
+          // this will get the titles of articles the user voted on
           {
             model: Post,
             attributes: ['title'],

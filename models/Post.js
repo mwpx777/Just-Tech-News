@@ -25,7 +25,18 @@ class Post extends Model{
                         sequelize.literal('(SELECT COUNT (*) FROM vote WHERE post.id = votes.post_id)'),
                         'vote_count'
                     ]
-                ]
+                ],
+                include: [
+                    {
+                      model: models.Comment,
+                      attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                      include: {
+                        model: models.User,
+                        attributes: ['username']
+                      }
+                    }
+                  ]
+            
             });
         });
     }

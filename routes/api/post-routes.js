@@ -1,21 +1,31 @@
 
 const router = require('express').Router();
-const { Post, User, Vote } = require('../../models');
+const { Post, User, Vote, Comment } = require('../../models');
 const sequelize = require('../../config/connection');
 
 // get all users
 router.get('/', (req, res) => {
     Post.findAll({
+        order: [['created_at', 'DESC']],
         attributes: ['id',
             'post_url',
             'title',
             'created_at',
             [sequelize.literal('(SELECT COUNT (*) FROM vote WHERE post.id= vote.post_id)'), 'vote_count']
         ],
-        // this will order the posts decending from created_at date
-        order: [['created_at', 'DESC']],
+    //    this is for adding the comment to the post in an array
         include: [
             {
+                model: Comment,
+                attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                // this is for the comment user
+                include:{
+                    model: User,
+                    attributes:['username']
+                }
+            },
+            {
+                // this is for the user that created the post 
                 model: User,
                 attributes: ['username']
             }
@@ -43,6 +53,16 @@ router.get('/:id', (req, res) => {
         ],
         include: [
             {
+                model: Comment,
+                attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                // this is name of who posted comment
+                include: {
+                    model: User,
+                    attributes: ['username']
+                }
+            },
+            {
+                // this is name of the creater of the post
                 model: User,
                 attributes: ['username']
             }
