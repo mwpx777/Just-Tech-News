@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const{Post, User, Comment, Vote} = require('../models');
+const { route } = require('./api');
 
 // router.get('/', (req, res) => {
 //     // this will render homepage.handlebars (handlebars extention is implied!)
@@ -18,6 +19,8 @@ const{Post, User, Comment, Vote} = require('../models');
 // });
 
 router.get('/', (req, res) =>{
+   
+    console.log(req.session);
     Post.findAll({
         attributes: [
             'id',
@@ -51,4 +54,27 @@ router.get('/', (req, res) =>{
     });
 });
 
-module.exports = router;
+// router.get('/login', (req, res) =>{
+    
+//     // if loggedIn, redirect to homepage
+//     if(req.session.loggedIn) {
+//         res.redirect('/');
+//         console.log('you are logged in!')
+//         return;
+//     }
+//     res.render('login');
+// });
+
+// module.exports = router;
+
+router.get('/login', (req, res) => {
+    if (req.session.loggedIn) {
+        console.log('you are logged in!')
+      res.redirect('/');
+      return;
+    }
+  
+    res.render('login');
+  });
+  
+  module.exports = router;
