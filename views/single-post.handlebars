@@ -27,6 +27,7 @@
 </form>
 {{/if}}
 
+<!-- this section was moved to comments.handlebars
 <div class="comments">
   {{#each post.comments}}
   <section class="comment">
@@ -39,6 +40,9 @@
   </section>
   {{/each}}
 </div>
+-->
+
+{{> comments post.comments}}
 
 {{#if loggedIn}}
 <script src="/javascript/comment.js"></script>
