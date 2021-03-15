@@ -1,7 +1,11 @@
 <ol class = "post-list">
-    {{!-- each is a helper clas that will run this for each post in the posts array --}}
+    {{!-- each is a helper class that will run this for each post in the posts array --}}
     {{#each posts as |post|}}
     <li>
+        {{!-- this is partial that references post-info.handlebars --}}
+        {{> post-info post}}
+
+        <!--
         <article class="post">
             <div class="title">
                 <a href="{{post_url}}" target="_blank">{{title}}</a>
@@ -14,6 +18,8 @@
                 <a href="/post/{{id}}">{{comments.length}} comment(s)</a>
             </div>
         </article>
+        -->
+
     </li>
     {{/each}}
 </ol>
